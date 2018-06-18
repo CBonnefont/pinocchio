@@ -3,6 +3,7 @@ import pinocchio as se3
 import numpy as np
 from pinocchio.utils import eye,zero,rand
 from pinocchio.robot_wrapper import RobotWrapper
+from os.path import join
 import os
 
 ones = lambda n: np.matrix(np.ones([n, 1] if isinstance(n, int) else n), np.double)
@@ -18,11 +19,9 @@ class TestGeometryObjectBindings(unittest.TestCase):
     m4ones = eye(4)
 
 
-    current_file =  os.path.dirname(os.path.abspath(__file__))
-    pinocchio_models_dir = os.path.abspath(os.path.join(current_file, '../models/romeo/romeo_description'))
-    romeo_model_path = os.path.abspath(pinocchio_models_dir, '/urdf/romeo.urdf')
-    hint_list = [pinocchio_models_dir, "wrong/hint"] # hint list
-    robot = RobotWrapper(romeo_model_path, hint_list, se3.JointModelFreeFlyer())
+    PKG = '/opt/openrobots/share'
+    URDF = join(PKG, 'romeo_description/urdf/romeo.urdf')
+    robot = RobotWrapper(URDF, [PKG])
 
     def test_name_get_set(self):
         col = self.robot.collision_model.geometryObjects[1]
